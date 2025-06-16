@@ -1,11 +1,16 @@
 package com.oracle_alura.scream_match.principal;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import com.oracle_alura.scream_match.model.DadosEpisodio;
 import com.oracle_alura.scream_match.model.DadosSerie;
 import com.oracle_alura.scream_match.model.DadosTemporada;
+import com.oracle_alura.scream_match.model.Episodio;
 import com.oracle_alura.scream_match.service.ConsumoApi;
 import com.oracle_alura.scream_match.service.ConverterDados;
 
@@ -33,5 +38,27 @@ public class Principal {
 			temporadas.add(dadosTemporada);
 		}
 		temporadas.forEach(System.out::println);
+
+        // for (int i = 0; i < dados.totalTemporadas(); i++) {
+        //     List<DadosEpisodio> episodiosTemporada = temporadas.get(i).episodios();
+        //     for (int j = 0; j < episodiosTemporada.size(); j++) {
+        //         System.out.println(episodiosTemporada.get(j).titulo());
+        //     }
+        // }
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
+
+        List<DadosEpisodio> dadosEpisodios = temporadas.stream().flatMap(t -> t.episodios().stream()).collect(Collectors.toList());
+
+        System.out.println("Top 5 episodios");
+
+        dadosEpisodios.stream().filter(e -> !e.avaliacoes().equalsIgnoreCase("N/A")).sorted(Comparator.comparing(DadosEpisodio::avaliacoes).reversed())
+        .limit(5)
+        .forEach(System.out::println);
+
+        List<Episodio> episodios = temporadas.stream().flatMap(t -> t.episodios().stream().map(d -> new Episodio(t.numero(), d))).collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
+
+        
     }
 }
