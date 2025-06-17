@@ -1,6 +1,7 @@
 package com.oracle_alura.scream_match.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,12 +18,22 @@ public class Episodio {
     private Double avaliacao;
     private LocalDate dataLancamento;
 
+    
+
     public Episodio(Integer numeroTemporada, DadosEpisodio dadosEpisodio){
         this.temporada = numeroTemporada;
         this.titulo = dadosEpisodio.titulo();
         this.numeroEpisodio = dadosEpisodio.numero();
+        try{
         this.avaliacao = Double.valueOf(dadosEpisodio.avaliacoes());
-        this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento()); 
+        }catch(NumberFormatException e){
+            this.avaliacao = 0.0;
+        }
+        try{
+            this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento()); 
+        }catch(DateTimeParseException e){
+            this.dataLancamento = null;
+        }
     }
 
         public String toString(){
