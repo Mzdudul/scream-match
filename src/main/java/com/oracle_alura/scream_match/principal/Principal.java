@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -60,6 +61,16 @@ public class Principal {
         List<Episodio> episodios = temporadas.stream().flatMap(t -> t.episodios().stream().map(d -> new Episodio(t.numero(), d))).collect(Collectors.toList());
 
         episodios.forEach(System.out::println);
+        
+        System.out.println("Digite um trecho do titulo do episodio: ");
+        var trechoTitulo = scanner.nextLine();
+        Optional<Episodio> episodiouscado = episodios.stream().filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase())).findFirst();
+        if(episodiouscado.isPresent()){
+            System.out.println("Episodio encontrado!");
+            System.out.println("Temporada: " + episodiouscado.get().getTemporada());
+        }else{
+            System.out.println("Episodio nao encontrado");
+        }
 
         System.out.println("A partir de que ano você deseja ver os episódios? ");
         var ano = scanner.nextInt();
