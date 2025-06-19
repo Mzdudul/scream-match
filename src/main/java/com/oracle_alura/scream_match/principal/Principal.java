@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collector;
@@ -86,6 +87,10 @@ public class Principal {
                         " Data lançamento: " + e.getDataLancamento().format(formatador)
                     ));
 
+
+        Map<Integer, Double> avalacoesPorTemporada = episodios.stream()
+        .collect(Collectors.groupingBy(Episodio::getTemporada, Collectors.averagingDouble(Episodio::getAvaliacao)));
+        System.out.println(avalacoesPorTemporada);
         
     }
 }
