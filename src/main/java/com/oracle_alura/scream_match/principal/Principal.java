@@ -89,6 +89,7 @@ public class Principal {
 
 
         Map<Integer, Double> avalacoesPorTemporada = episodios.stream()
+        .filter(e -> e.getAvaliacao() > 0.0)
         .collect(Collectors.groupingBy(Episodio::getTemporada, Collectors.averagingDouble(Episodio::getAvaliacao)));
         System.out.println(avalacoesPorTemporada);
         
